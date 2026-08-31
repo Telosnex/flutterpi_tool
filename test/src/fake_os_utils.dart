@@ -54,12 +54,17 @@ class FakeMoreOperatingSystemUtils extends Fake
   FakeMoreOperatingSystemUtils({
     this.hostPlatform = fl.HostPlatform.linux_x64,
     this.fpiHostPlatform = FlutterpiHostPlatform.linuxX64,
+    this.executables = const <String, File>{},
   });
 
+  final Map<String, File> executables;
   final List<List<String>> chmods = <List<String>>[];
+  final List<File> executableFiles = <File>[];
 
   @override
-  void makeExecutable(File file) {}
+  void makeExecutable(File file) {
+    executableFiles.add(file);
+  }
 
   @override
   fl.HostPlatform hostPlatform;
@@ -70,7 +75,7 @@ class FakeMoreOperatingSystemUtils extends Fake
   }
 
   @override
-  File? which(String execName) => null;
+  File? which(String execName) => executables[execName];
 
   @override
   List<File> whichAll(String execName) => <File>[];

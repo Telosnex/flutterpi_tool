@@ -20,6 +20,8 @@ class TestFeatureFlags implements fl.FeatureFlags {
     this.isWindowingEnabled = false,
     this.isAccessibilityEvaluationsEnabled = false,
     this.isRiscv64SupportEnabled = false,
+    this.isRecordUseEnabled = false,
+    this.isMacOSArm64OnlyEnabled = false,
   });
 
   @override
@@ -77,6 +79,12 @@ class TestFeatureFlags implements fl.FeatureFlags {
   final bool isRiscv64SupportEnabled;
 
   @override
+  final bool isRecordUseEnabled;
+
+  @override
+  final bool isMacOSArm64OnlyEnabled;
+
+  @override
   bool isEnabled(fl.Feature feature) {
     return switch (feature) {
       fl.flutterWebFeature => isWebEnabled,
@@ -97,6 +105,8 @@ class TestFeatureFlags implements fl.FeatureFlags {
       fl.windowingFeature => isWindowingEnabled,
       fl.accessibilityEvaluationsFeature => isAccessibilityEvaluationsEnabled,
       fl.riscv64 => isRiscv64SupportEnabled,
+      fl.recordUse => isRecordUseEnabled,
+      fl.macOSArm64Only => isMacOSArm64OnlyEnabled,
       _ => false,
     };
   }
@@ -121,6 +131,8 @@ class TestFeatureFlags implements fl.FeatureFlags {
         fl.windowingFeature,
         fl.accessibilityEvaluationsFeature,
         fl.riscv64,
+        fl.recordUse,
+        fl.macOSArm64Only,
       ];
 
   @override

@@ -1,6 +1,10 @@
 # flutterpi_tool
 A tool to make developing &amp; distributing flutter apps for https://github.com/ardera/flutter-pi easier.
 
+> **Telosnex fork:** branch `telosnex/flutter-3.47` supports the exact Flutter
+> 3.47 toolchain used by Telosnex. Consumers should pin a full commit; this fork
+> is not published to pub.dev.
+
 ## 📰 News
 - Building & Running apps on [meta-flutter](https://github.com/meta-flutter/meta-flutter) yocto distros works now,
   via the `--fs-layout=meta-flutter` option to `flutterpi_tool devices add`, `flutterpi_tool build`.

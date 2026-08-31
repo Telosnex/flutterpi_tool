@@ -52,11 +52,116 @@ void main() {
     platform = fl.FakePlatform();
     flutterpiArtifacts = MockFlutterpiArtifacts();
     buildSystem = MockBuildSystem();
-    moreOs = FakeMoreOperatingSystemUtils();
+    moreOs = FakeMoreOperatingSystemUtils(
+      executables: <String, fl.File>{
+        for (final triple in <String>[
+          'arm-linux-gnueabihf',
+          'riscv64-linux-gnu',
+        ])
+          for (final tool in <String>['gcc', 'g++', 'ar', 'ld'])
+            '$triple-$tool': fs.file('/toolchain/$triple-$tool'),
+      },
+    );
     appBuilder = AppBuilder(
       operatingSystemUtils: moreOs,
       buildSystem: buildSystem,
     );
+  });
+
+  group('native-assets compiler configuration', () {
+    setUp(() {
+      buildSystem.buildFn = (
+        fl.Target target,
+        fl.Environment environment, {
+        fl.BuildSystemConfig buildSystemConfig = const fl.BuildSystemConfig(),
+      }) async =>
+          fl.BuildResult(success: true);
+    });
+
+    test('writes cross-compiler wrappers and cache', () async {
+      await _runInTestContext(
+        () async => appBuilder.build(
+          host: FlutterpiHostPlatform.linuxX64,
+          target: FlutterpiTargetPlatform.genericRiscv64,
+          buildInfo: fl.BuildInfo.debug,
+          fsLayout: FilesystemLayout.flutterPi,
+        ),
+      );
+
+      final configDirectory = fs.directory(
+        'build/flutter-pi/riscv64-generic/linux/riscv64/debug',
+      );
+      final wrapperDirectory = configDirectory
+          .childDirectory('.native-assets-toolchain')
+          .childDirectory('riscv64-linux-gnu');
+      final ccWrapper = wrapperDirectory.childFile('clang');
+      final cxxWrapper = wrapperDirectory.childFile('clang++');
+      final cache = configDirectory.childFile('CMakeCache.txt');
+
+      expect(
+        ccWrapper.readAsStringSync(),
+        "#!/bin/sh\nexec '/toolchain/riscv64-linux-gnu-gcc' \"\$@\"\n",
+      );
+      expect(
+        cxxWrapper.readAsStringSync(),
+        "#!/bin/sh\nexec '/toolchain/riscv64-linux-gnu-g++' \"\$@\"\n",
+      );
+      expect(
+        cache.readAsStringSync(),
+        contains(
+          'CMAKE_CXX_COMPILER:FILEPATH=${cxxWrapper.path}',
+        ),
+      );
+      expect(
+        cache.readAsStringSync(),
+        contains(
+          'CMAKE_AR:FILEPATH=/toolchain/riscv64-linux-gnu-ar',
+        ),
+      );
+      expect(
+        moreOs.executableFiles.map((file) => file.path),
+        unorderedEquals([ccWrapper.path, cxxWrapper.path]),
+      );
+    });
+
+    test('uses the native Linux toolchain without wrappers', () async {
+      final nativeOs = FakeMoreOperatingSystemUtils(
+        fpiHostPlatform: FlutterpiHostPlatform.linuxRV64,
+        executables: <String, fl.File>{
+          'clang++': fs.file('/native/clang++'),
+          'ar': fs.file('/native/ar'),
+          'ld': fs.file('/native/ld'),
+        },
+      );
+      final nativeBuilder = AppBuilder(
+        operatingSystemUtils: nativeOs,
+        buildSystem: buildSystem,
+      );
+
+      await _runInTestContext(
+        () async => nativeBuilder.build(
+          host: FlutterpiHostPlatform.linuxRV64,
+          target: FlutterpiTargetPlatform.genericRiscv64,
+          buildInfo: fl.BuildInfo.release,
+          fsLayout: FilesystemLayout.flutterPi,
+        ),
+      );
+
+      final configDirectory = fs.directory(
+        'build/flutter-pi/riscv64-generic/linux/riscv64/release',
+      );
+      final cache = configDirectory.childFile('CMakeCache.txt');
+      expect(
+        cache.readAsStringSync(),
+        contains(
+          'CMAKE_CXX_COMPILER:FILEPATH=/native/clang++',
+        ),
+      );
+      expect(
+        configDirectory.childDirectory('.native-assets-toolchain').existsSync(),
+        isFalse,
+      );
+    });
   });
 
   test('calls build system', () async {

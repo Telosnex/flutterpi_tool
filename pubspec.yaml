@@ -1,11 +1,12 @@
 name: flutterpi_tool
 description: A tool to make development & distribution of flutter-pi apps easier.
-version: 0.12.0
-repository: https://github.com/ardera/flutterpi_tool
+version: 0.12.0+telosnex.1
+publish_to: none
+repository: https://github.com/Telosnex/flutterpi_tool
 
 environment:
   sdk: ^3.0.5
-  flutter: ">=3.44.0"
+  flutter: ">=3.47.0 <3.48.0"
 
 executables:
   # TODO(ardera): Maybe add an alias `flutterpi-tool` here?

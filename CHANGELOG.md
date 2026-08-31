@@ -1,3 +1,10 @@
+## 0.12.0+telosnex.1 - 2026-08-31
+
+- support Flutter 3.47 internal build-system APIs
+- use Flutter 3.47 `LinkHooks` for native assets
+- configure native and cross Linux native-assets toolchains deterministically
+- add coverage for native and cross compiler cache generation
+
 ## 0.12.0 - 2026-07-22
 
 - flutter 3.44.x compatibility (thanks to [@jpohhhh](https://github.com/jpohhhh))
