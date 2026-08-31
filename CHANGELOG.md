@@ -1,10 +1,11 @@
-## 0.12.0+telosnex.2 - 2026-08-31
+## 0.12.0+telosnex.3 - 2026-08-31
 
 - support Flutter 3.47 internal build-system APIs
 - use Flutter 3.47 `LinkHooks` for native assets
 - configure native and cross Linux native-assets toolchains deterministically
 - add coverage for native and cross compiler cache generation
 - commit the executable tool dependency lockfile
+- bundle ICU data from the selected flutter-pi universal artifact set
 
 ## 0.12.0 - 2026-07-22
 

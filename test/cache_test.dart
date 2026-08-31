@@ -5,6 +5,7 @@ import 'package:github/github.dart';
 import 'package:http/testing.dart' as http;
 import 'package:test/test.dart';
 
+import 'package:flutterpi_tool/src/artifacts.dart';
 import 'package:flutterpi_tool/src/more_os_utils.dart';
 import 'package:flutterpi_tool/src/cache.dart';
 import 'package:flutterpi_tool/src/common.dart';
@@ -318,6 +319,49 @@ Future<Set<String>> getArtifactKeysFor({
 }
 
 void main() {
+  test('cached artifacts use flutter-pi universal ICU data', () async {
+    final logger = BufferLogger.test();
+    final fs = MemoryFileSystem.test();
+    final platform = FakePlatform();
+    final hooks = ShutdownHooks();
+    final processManager = FakeProcessManager.any();
+    final cache = FlutterpiCache.test(
+      rootOverride: fs.directory('cache'),
+      artifacts: const [],
+      logger: logger,
+      fileSystem: fs,
+      platform: platform,
+      osUtils: MoreOperatingSystemUtils(
+        fileSystem: fs,
+        logger: logger,
+        platform: platform,
+        processManager: processManager,
+      ),
+      processManager: processManager,
+      hooks: hooks,
+      github: FakeGithub(),
+    );
+    final artifacts = CachedFlutterpiArtifacts(
+      inner: Artifacts.test(),
+      cache: cache,
+    );
+
+    expect(
+      artifacts.getArtifactPath(Artifact.icuData),
+      fs.path.join(
+        'cache',
+        'bin',
+        'cache',
+        'artifacts',
+        'engine',
+        'flutterpi-universal',
+        'icudtl.dat',
+      ),
+    );
+
+    await hooks.runShutdownHooks(logger);
+  });
+
   test('universal artifacts', () async {
     final artifacts = await getArtifactKeysFor(
       flavors: {EngineFlavor.debugUnopt, EngineFlavor.release},

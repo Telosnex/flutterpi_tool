@@ -63,6 +63,13 @@ class CachedFlutterpiArtifacts implements FlutterpiArtifacts {
     BuildMode? mode,
     EnvironmentType? environmentType,
   }) {
+    if (artifact == Artifact.icuData) {
+      return cache
+          .getArtifactDirectory('engine')
+          .childDirectory('flutterpi-universal')
+          .childFile('icudtl.dat')
+          .path;
+    }
     return inner.getArtifactPath(
       artifact,
       platform: platform,

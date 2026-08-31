@@ -1,6 +1,6 @@
 name: flutterpi_tool
 description: A tool to make development & distribution of flutter-pi apps easier.
-version: 0.12.0+telosnex.2
+version: 0.12.0+telosnex.3
 publish_to: none
 repository: https://github.com/Telosnex/flutterpi_tool
 
