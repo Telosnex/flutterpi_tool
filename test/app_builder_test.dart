@@ -100,11 +100,17 @@ void main() {
 
       expect(
         ccWrapper.readAsStringSync(),
-        "#!/bin/sh\nexec '/toolchain/riscv64-linux-gnu-gcc' \"\$@\"\n",
+        allOf(
+          contains("exec '/toolchain/riscv64-linux-gnu-gcc' \"\$@\""),
+          contains('--target=*'),
+        ),
       );
       expect(
         cxxWrapper.readAsStringSync(),
-        "#!/bin/sh\nexec '/toolchain/riscv64-linux-gnu-g++' \"\$@\"\n",
+        allOf(
+          contains("exec '/toolchain/riscv64-linux-gnu-g++' \"\$@\""),
+          contains('--target=*'),
+        ),
       );
       expect(
         cache.readAsStringSync(),

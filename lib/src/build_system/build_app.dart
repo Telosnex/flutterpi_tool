@@ -271,8 +271,30 @@ CMAKE_LINKER:FILEPATH=${linker.path}
 ''');
   }
 
-  static String _compilerWrapper(String executable) =>
-      '#!/bin/sh\nexec ${_shellQuote(executable)} "\$@"\n';
+  static String _compilerWrapper(String executable) => '''#!/bin/sh
+# native_toolchain_c passes Clang's --target flag. The cross compiler selected
+# here is GCC, whose target is fixed by its executable name and which rejects
+# that flag. Rotate arguments around a sentinel to remove only --target while
+# preserving argument boundaries and order in POSIX sh.
+run_without_clang_target() {
+  case "\$1" in
+    __flutterpi_tool_end_of_args__)
+      shift
+      exec ${_shellQuote(executable)} "\$@"
+      ;;
+    --target=*)
+      shift
+      run_without_clang_target "\$@"
+      ;;
+    *)
+      argument="\$1"
+      shift
+      run_without_clang_target "\$@" "\$argument"
+      ;;
+  esac
+}
+run_without_clang_target "\$@" __flutterpi_tool_end_of_args__
+''';
 
   static String _shellQuote(String value) =>
       "'${value.replaceAll("'", "'\\''")}'";
