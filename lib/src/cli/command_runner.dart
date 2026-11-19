@@ -1,8 +1,9 @@
 // ignore_for_file: avoid_print, implementation_imports
-
 import 'package:args/command_runner.dart';
+import 'package:flutter_tools/src/features.dart' as features;
 import 'package:flutterpi_tool/src/cli/flutterpi_command.dart';
 import 'package:flutterpi_tool/src/fltool/common.dart';
+import 'package:flutterpi_tool/src/fltool/globals.dart' as globals;
 
 class FlutterpiToolCommandRunner extends CommandRunner<void>
     implements FlutterCommandRunner {
@@ -69,6 +70,13 @@ class FlutterpiToolCommandRunner extends CommandRunner<void>
       hide: !verboseHelp,
     );
   }
+
+  @override
+  get analytics => globals.analytics;
+  @override
+  get featureFlags => features.featureFlags;
+  @override
+  final toolContext = globals.PiToolContext();
 
   @override
   String get usageFooter => '';

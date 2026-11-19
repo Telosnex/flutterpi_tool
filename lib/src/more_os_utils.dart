@@ -76,6 +76,13 @@ class MoreOperatingSystemUtilsWrapper implements MoreOperatingSystemUtils {
   }
 
   @override
+  HostPlatform get defaultHostPlatform => os.defaultHostPlatform;
+  @override
+  HostPlatform? get hostPlatformOverride => os.hostPlatformOverride;
+  @override
+  set hostPlatformOverride(HostPlatform? value) =>
+      os.hostPlatformOverride = value;
+  @override
   HostPlatform get hostPlatform => os.hostPlatform;
 
   @override
@@ -228,6 +235,13 @@ class DelegatingMoreOsUtils implements MoreOperatingSystemUtils {
     return delegate.gzipLevel1Stream(stream);
   }
 
+  @override
+  HostPlatform get defaultHostPlatform => delegate.defaultHostPlatform;
+  @override
+  HostPlatform? get hostPlatformOverride => delegate.hostPlatformOverride;
+  @override
+  set hostPlatformOverride(HostPlatform? value) =>
+      delegate.hostPlatformOverride = value;
   @override
   HostPlatform get hostPlatform => delegate.hostPlatform;
 

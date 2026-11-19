@@ -162,6 +162,10 @@ Future<V> runInTestContext<V>(
       ProcessManager: () => FakeProcessManager.empty(),
       fltool.UserMessages: () => fltool.UserMessages(),
       fltool.Config: () => fltool.Config.test(),
+      fltool.PersistentToolState: () => fltool.PersistentToolState.test(
+            directory: globals.fs.systemTempDirectory,
+            logger: globals.logger,
+          ),
       fltool.FileSystemUtils: () => fltool.FileSystemUtils(
             fileSystem: globals.fs,
             platform: globals.platform,

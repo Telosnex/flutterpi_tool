@@ -636,6 +636,7 @@ abstract class FlutterpiCache extends Cache {
   @protected
   final Platform platform;
   @protected
+  @override
   final MoreOperatingSystemUtils osUtils;
   @protected
   final io.HttpClient httpClient;
@@ -1057,5 +1058,6 @@ Future<String> getFlutterRoot() async {
 
   const dirname = path.dirname;
 
-  return dirname(dirname(dirname(flutterToolsPath)));
+  return io.Directory(dirname(dirname(dirname(flutterToolsPath))))
+      .resolveSymbolicLinks();
 }

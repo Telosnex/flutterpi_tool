@@ -2,9 +2,9 @@ name: Build Test App
 
 on:
   push:
-    branches: ["main"]
+    branches: ["telosnex/flutter-3.50"]
   pull_request:
-    branches: ["main"]
+    branches: ["telosnex/flutter-3.50"]
 
 permissions:
   contents: read
@@ -38,12 +38,12 @@ jobs:
         with:
           cache: true
           channel: stable
-          flutter-version: 3.44.0
+          flutter-version: 3.50.0
 
-      - name: Install dependencies & Activate as global executable
+      - name: Install locked dependencies
         run: |
-          flutter pub get
-          flutter pub global activate -spath .
+          dart tool/link_sdk.dart
+          dart pub get --enforce-lockfile
 
       - name: Create test app
         run: flutter create test_app
@@ -54,17 +54,17 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           echo '::group::flutterpi_tool build ... --debug-unoptimized'
-          flutterpi_tool build --arch=${{ matrix.arch }} --cpu=${{ matrix.cpu }} --debug-unoptimized --debug-symbols --verbose
+          dart --packages=../.dart_tool/package_config.json ../bin/flutterpi_tool.dart build --arch=${{ matrix.arch }} --cpu=${{ matrix.cpu }} --debug-unoptimized --debug-symbols --verbose
           echo '::endgroup::'
 
           echo '::group::flutterpi_tool build ... --debug'
-          flutterpi_tool build --arch=${{ matrix.arch }} --cpu=${{ matrix.cpu }} --debug --debug-symbols --verbose
+          dart --packages=../.dart_tool/package_config.json ../bin/flutterpi_tool.dart build --arch=${{ matrix.arch }} --cpu=${{ matrix.cpu }} --debug --debug-symbols --verbose
           echo '::endgroup::'
 
           echo '::group::flutterpi_tool build ... --profile'
-          flutterpi_tool build --arch=${{ matrix.arch }} --cpu=${{ matrix.cpu }} --profile --debug-symbols --verbose
+          dart --packages=../.dart_tool/package_config.json ../bin/flutterpi_tool.dart build --arch=${{ matrix.arch }} --cpu=${{ matrix.cpu }} --profile --debug-symbols --verbose
           echo '::endgroup::'
 
           echo '::group::flutterpi_tool build ... --release'
-          flutterpi_tool build --arch=${{ matrix.arch }} --cpu=${{ matrix.cpu }} --release --debug-symbols --verbose
+          dart --packages=../.dart_tool/package_config.json ../bin/flutterpi_tool.dart build --arch=${{ matrix.arch }} --cpu=${{ matrix.cpu }} --release --debug-symbols --verbose
           echo '::endgroup::'

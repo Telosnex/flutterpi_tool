@@ -18,7 +18,7 @@ class TestFeatureFlags implements fl.FeatureFlags {
     this.isDartDataAssetsEnabled = false,
     this.isUISceneMigrationEnabled = false,
     this.isWindowingEnabled = false,
-    this.isAccessibilityEvaluationsEnabled = false,
+    this.isHcppEnabled = false,
     this.isRiscv64SupportEnabled = false,
     this.isRecordUseEnabled = false,
     this.isMacOSArm64OnlyEnabled = false,
@@ -73,7 +73,9 @@ class TestFeatureFlags implements fl.FeatureFlags {
   final bool isWindowingEnabled;
 
   @override
-  final bool isAccessibilityEvaluationsEnabled;
+  final bool isHcppEnabled;
+  @override
+  bool get isToolExtensionsEnabled => false;
 
   @override
   final bool isRiscv64SupportEnabled;
@@ -103,7 +105,7 @@ class TestFeatureFlags implements fl.FeatureFlags {
       fl.dartDataAssets => isDartDataAssetsEnabled,
       fl.uiSceneMigration => isUISceneMigrationEnabled,
       fl.windowingFeature => isWindowingEnabled,
-      fl.accessibilityEvaluationsFeature => isAccessibilityEvaluationsEnabled,
+      fl.hcpp => isHcppEnabled,
       fl.riscv64 => isRiscv64SupportEnabled,
       fl.recordUse => isRecordUseEnabled,
       fl.macOSArm64Only => isMacOSArm64OnlyEnabled,
@@ -129,7 +131,7 @@ class TestFeatureFlags implements fl.FeatureFlags {
         fl.dartDataAssets,
         fl.uiSceneMigration,
         fl.windowingFeature,
-        fl.accessibilityEvaluationsFeature,
+        fl.hcpp,
         fl.riscv64,
         fl.recordUse,
         fl.macOSArm64Only,

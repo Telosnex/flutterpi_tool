@@ -137,6 +137,8 @@ class FakeDevice implements fl.Device {
   bool supportsStartPaused = true;
 
   @override
+  Future<fl.CpuArch> get cpuArch async => fl.CpuArch.unknown;
+  @override
   Future<fl.TargetPlatform> targetPlatform;
 
   @override

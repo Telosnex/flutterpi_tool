@@ -1,12 +1,12 @@
 name: flutterpi_tool
 description: A tool to make development & distribution of flutter-pi apps easier.
-version: 0.12.0+telosnex.3
+version: 0.12.0+telosnex.4
 publish_to: none
 repository: https://github.com/Telosnex/flutterpi_tool
 
 environment:
   sdk: ^3.0.5
-  flutter: ">=3.47.0 <3.48.0"
+  flutter: ">=3.50.0 <3.51.0"
 
 executables:
   # TODO(ardera): Maybe add an alias `flutterpi-tool` here?
@@ -31,3 +31,14 @@ dependencies:
 dev_dependencies:
   lints: ^2.0.0
   test: ^1.21.0
+
+# tool/link_sdk.dart points this ignored link at the invoking Flutter SDK.
+dependency_overrides:
+  flutter_tools:
+    path: .dart_tool/flutter-sdk/packages/flutter_tools
+  flutter_tools_core:
+    path: .dart_tool/flutter-sdk/packages/flutter_tools/packages/flutter_tools_core
+  flutter_tools_extension:
+    path: .dart_tool/flutter-sdk/packages/flutter_tools/packages/flutter_tools_extension
+  flutter_tools_extension_linux_prototype:
+    path: .dart_tool/flutter-sdk/packages/flutter_tools/packages/flutter_tools_extension_linux_prototype

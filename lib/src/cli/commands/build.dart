@@ -85,7 +85,7 @@ class BuildCommand extends FlutterpiCommand {
 
   @override
   FlutterpiToolCommandRunner? get runner =>
-      super.runner as FlutterpiToolCommandRunner;
+      super.runner as FlutterpiToolCommandRunner?;
 
   EngineFlavor get defaultFlavor => EngineFlavor.debug;
 

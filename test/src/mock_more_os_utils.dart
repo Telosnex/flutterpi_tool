@@ -78,6 +78,10 @@ class MockMoreOperatingSystemUtils implements MoreOperatingSystemUtils {
   }
 
   @override
+  HostPlatform? hostPlatformOverride;
+  @override
+  HostPlatform get defaultHostPlatform => hostPlatform;
+  @override
   HostPlatform hostPlatform = HostPlatform.linux_x64;
 
   void Function(File file)? makeExecutableFn;

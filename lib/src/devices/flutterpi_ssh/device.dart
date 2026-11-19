@@ -718,6 +718,22 @@ class FlutterpiSshDevice extends fl.Device {
   }
 
   @override
+  Future<fl.CpuArch> get cpuArch async =>
+      switch (await flutterpiTargetPlatform) {
+        FlutterpiTargetPlatform.genericArmV7 ||
+        FlutterpiTargetPlatform.pi3 ||
+        FlutterpiTargetPlatform.pi4 =>
+          fl.CpuArch.armv7,
+        FlutterpiTargetPlatform.genericRiscv64 => fl.CpuArch.riscv64,
+        FlutterpiTargetPlatform.genericAArch64 ||
+        FlutterpiTargetPlatform.pi3_64 ||
+        FlutterpiTargetPlatform.pi4_64 ||
+        FlutterpiTargetPlatform.pi5_64 =>
+          fl.CpuArch.arm64,
+        FlutterpiTargetPlatform.genericX64 => fl.CpuArch.x64,
+      };
+
+  @override
   Future<fl.TargetPlatform> get targetPlatform async =>
       switch (await flutterpiTargetPlatform) {
         FlutterpiTargetPlatform.genericArmV7 ||

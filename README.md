@@ -1,8 +1,8 @@
 # flutterpi_tool
 A tool to make developing &amp; distributing flutter apps for https://github.com/ardera/flutter-pi easier.
 
-> **Telosnex fork:** branch `telosnex/flutter-3.47` supports the exact Flutter
-> 3.47 toolchain used by Telosnex. Consumers should pin a full commit; this fork
+> **Telosnex fork:** branch `telosnex/flutter-3.50` supports the exact Flutter
+> 3.50 toolchain used by Telosnex. Consumers should pin a full commit; this fork
 > is not published to pub.dev.
 
 ## 📰 News
@@ -13,20 +13,21 @@ A tool to make developing &amp; distributing flutter apps for https://github.com
   `--flutterpi-binary=...`
 
 ## Setup
-Setting up is as simple as:
-```shell
-flutter pub global activate flutterpi_tool
-```
-
-`flutterpi_tool` is pretty deeply integrated with the official flutter tool, so it's very well possible you encounter errors during this step when using incompatible versions.
-
-If that happens, and `flutter pub global activate` exits with an error, make sure you're on the latest stable flutter SDK. If you're on an older flutter SDK, you might want to add an explicit dependency constraint to use an older version of flutterpi_tool. E.g. for flutter 3.19 you would use flutterpi_tool 0.3.x:
+In this checkout, use `dart` from the selected Flutter 3.50 SDK:
 
 ```shell
-flutter pub global activate flutterpi_tool ^0.3.0
+dart tool/link_sdk.dart
+dart pub get --enforce-lockfile
 ```
 
-If you are already using the latest stable flutter SDK, and the command still doesn't work, please open an issue!
+To invoke the tool from a Flutter app directory, use its locked package config:
+
+```shell
+dart --packages=/path/to/flutterpi_tool/.dart_tool/package_config.json \
+  /path/to/flutterpi_tool/bin/flutterpi_tool.dart --help
+```
+
+The examples below use `flutterpi_tool` as shorthand for this invocation.
 
 ## Usage
 ```console
